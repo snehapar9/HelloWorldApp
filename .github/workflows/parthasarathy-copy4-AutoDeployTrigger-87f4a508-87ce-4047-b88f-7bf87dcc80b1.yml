@@ -1,0 +1,45 @@
+name: Trigger auto deployment for parthasarathy-copy4
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ main ]
+    paths:
+    - '**'
+    - '.github/workflows/parthasarathy-copy4-AutoDeployTrigger-87f4a508-87ce-4047-b88f-7bf87dcc80b1.yml'
+
+  # Allow manual trigger 
+  workflow_dispatch:      
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions: 
+      id-token: write #This is required for requesting the OIDC JWT Token
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.PARTHASARATHYCOPY4_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.PARTHASARATHYCOPY4_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.PARTHASARATHYCOPY4_AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }} 
+          registryUrl: 
+          registryUsername: ${{ secrets.PARTHASARATHYCOPY4_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.PARTHASARATHYCOPY4_REGISTRY_PASSWORD }}
+          containerAppName: parthasarathy-copy4
+          resourceGroup: ca-snehapar-group
+          imageToBuild: default/[parameters('containerAppName')]:${{ github.sha }}
+          
+
+
