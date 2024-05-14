@@ -40,7 +40,7 @@ jobs:
       - name: Install latest azure-cli-extensions wheel
         run: az extension add --source '${{ github.workspace }}/azure-cli-extensions/containerapp-0.3.50-py2.py3-none-any.whl' --yes
       - name: Build and push container image to registry
-        uses: azure/container-apps-deploy-action@c5d5a8495d54aee14474c448d8c9a9178aecf594
+        uses: azure/container-apps-deploy-action@482d4c56f2f39dbb11630cb30c2a669c7fd3fe98
         with:
           appSourcePath: ${{ github.workspace }} 
           registryUrl: 
