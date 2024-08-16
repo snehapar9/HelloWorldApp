@@ -1,4 +1,4 @@
-name: Trigger auto deployment for parthasarathy-copy6
+name: Trigger auto deployment for test-action
 
 # When this action will be executed
 on:
@@ -8,7 +8,7 @@ on:
       [ main ]
     paths:
     - '**'
-    - '.github/workflows/parthasarathy-copy6-AutoDeployTrigger-bdeccfea-b3b4-4388-b435-aacbab7a8585.yml'
+    - '.github/workflows/test-action-AutoDeployTrigger-f9f44bbe-dbb8-4780-8c4c-10ba6893c046.yml'
 
   # Allow manual trigger 
   workflow_dispatch:      
@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions: 
       id-token: write #This is required for requesting the OIDC JWT Token
+      contents: read #Required when GH token is used to authenticate with private repo
 
     steps:
       - name: Checkout to the branch
@@ -26,20 +27,21 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.PARTHASARATHYCOPY6_AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.PARTHASARATHYCOPY6_AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.PARTHASARATHYCOPY6_AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.TESTACTION_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.TESTACTION_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.TESTACTION_AZURE_SUBSCRIPTION_ID }}
 
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
           appSourcePath: ${{ github.workspace }} 
           registryUrl: 
-          registryUsername: ${{ secrets.PARTHASARATHYCOPY6_REGISTRY_USERNAME }}
-          registryPassword: ${{ secrets.PARTHASARATHYCOPY6_REGISTRY_PASSWORD }}
-          containerAppName: parthasarathy-copy6
-          resourceGroup: ca-snehapar-group
+          registryUsername: ${{ secrets.TESTACTION_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.TESTACTION_REGISTRY_PASSWORD }}
+          containerAppName: test-action
+          resourceGroup: westus-rg
           imageToBuild: default/[parameters('containerAppName')]:${{ github.sha }}
-          
+          _buildArgumentsKey_: |
+            _buildArgumentsValues_
 
 

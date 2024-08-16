@@ -1,4 +1,4 @@
-name: Trigger auto deployment for capp-test2
+name: Trigger auto deployment for test123
 
 # When this action will be executed
 on:
@@ -8,7 +8,7 @@ on:
       [ main ]
     paths:
     - '**'
-    - '.github/workflows/capp-test2-AutoDeployTrigger-2ccae905-3dca-4fbf-8742-d0191f46f211.yml'
+    - '.github/workflows/test123-AutoDeployTrigger-da7ff5a1-22c9-4b43-8481-bd38edf44b33.yml'
 
   # Allow manual trigger 
   workflow_dispatch:      
@@ -27,19 +27,19 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.CAPPTEST2_AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.CAPPTEST2_AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.CAPPTEST2_AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.TEST123_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.TEST123_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.TEST123_AZURE_SUBSCRIPTION_ID }}
 
       - name: Build and push container image to registry
-        uses: azure/container-apps-deploy-action@v2
+        uses: azure/container-apps-deploy-action@b1c277dd8216d640efe1b2a75e60baaa1bf009ca
         with:
           appSourcePath: ${{ github.workspace }} 
           registryUrl: 
-          registryUsername: ${{ secrets.CAPPTEST2_REGISTRY_USERNAME }}
-          registryPassword: ${{ secrets.CAPPTEST2_REGISTRY_PASSWORD }}
-          containerAppName: capp-test2
-          resourceGroup: ca-snehapar-group
+          registryUsername: ${{ secrets.TEST123_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.TEST123_REGISTRY_PASSWORD }}
+          containerAppName: test123
+          resourceGroup: westus-rg
           imageToBuild: default/[parameters('containerAppName')]:${{ github.sha }}
           _buildArgumentsKey_: |
             _buildArgumentsValues_

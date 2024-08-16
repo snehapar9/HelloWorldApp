@@ -1,4 +1,4 @@
-name: Trigger auto deployment for app-spaces-test
+name: Trigger auto deployment for testapp1
 
 # When this action will be executed
 on:
@@ -8,7 +8,7 @@ on:
       [ main ]
     paths:
     - '**'
-    - '.github/workflows/app-spaces-test-AutoDeployTrigger-8c9f1a47-9083-4e55-b2b1-b18c7f1943f5.yml'
+    - '.github/workflows/testapp1-AutoDeployTrigger-a033f42a-03e3-484f-9332-6621230e2c2b.yml'
 
   # Allow manual trigger 
   workflow_dispatch:      
@@ -27,26 +27,27 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.APPSPACESTEST_AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.APPSPACESTEST_AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.APPSPACESTEST_AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.TESTAPP1_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.TESTAPP1_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.TESTAPP1_AZURE_SUBSCRIPTION_ID }}
 
       - name: Clone azure-cli-extensions repo
         uses: actions/checkout@v3
         with:
-          repository: snehapar9/test
-          path: azure-cli-extensions
-          
+         repository: snehapar9/test
+         path: azure-cli-extensions
+
       - name: Install latest azure-cli-extensions wheel
-        run: az extension add --source '${{ github.workspace }}/azure-cli-extensions/containerapp-0.3.50-py2.py3-none-any.whl' --yes
+        run: az extension add --source '${{github.workspace}}/azure-cli-extensions/containerapp-0.3.50-py2.py3-none-any.whl' --yes
+        
       - name: Build and push container image to registry
-        uses: azure/container-apps-deploy-action@482d4c56f2f39dbb11630cb30c2a669c7fd3fe98
+        uses: azure/container-apps-deploy-action@e4732da4ecc1c55b1ab37bd88c7d4abbbee674a6
         with:
           appSourcePath: ${{ github.workspace }} 
           registryUrl: 
-          registryUsername: ${{ secrets.APPSPACESTEST_REGISTRY_USERNAME }}
-          registryPassword: ${{ secrets.APPSPACESTEST_REGISTRY_PASSWORD }}
-          containerAppName: app-spaces-test
+          registryUsername: ${{ secrets.TESTAPP1_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.TESTAPP1_REGISTRY_PASSWORD }}
+          containerAppName: testapp1
           resourceGroup: westus-rg
           imageToBuild: default/[parameters('containerAppName')]:${{ github.sha }}
           _buildArgumentsKey_: |
