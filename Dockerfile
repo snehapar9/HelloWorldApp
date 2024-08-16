@@ -1,8 +1,8 @@
 FROM mcr.microsoft.com/dotnet/aspnet:7.0-nanoserver-1809 AS base
 WORKDIR /app
-EXPOSE 5086
+EXPOSE 8080
 
-ENV ASPNETCORE_URLS=http://+:5086
+ENV ASPNETCORE_URLS=http://+:8080
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0-nanoserver-1809 AS build
 ARG configuration=Release
