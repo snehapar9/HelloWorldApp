@@ -1,10 +1,11 @@
-FROM mcr.microsoft.com/dotnet/aspnet:7.0-nanoserver-1809 AS base
+# Use Linux-based images instead of Windows-based ones
+FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine AS base
 WORKDIR /app
 EXPOSE 8080
 
 ENV ASPNETCORE_URLS=http://+:8080
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0-nanoserver-1809 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine AS build
 ARG configuration=Release
 WORKDIR /src
 COPY ["HelloWorldApp.csproj", "./"]
